@@ -5,8 +5,8 @@ import os
 from torch.utils.tensorboard import SummaryWriter
 
 
-num_exp = len(os.listdir())
-writer = SummaryWriter(f'./checkpoint/exp{num_exp}/log')
+num_exp = len(os.listdir('./checkpoint/'))
+writer = SummaryWriter(f'./checkpoint/exp{num_exp-1}/log')
 def train(net, epoch, loader, device, lr):
     print("Traing")
     net.train()

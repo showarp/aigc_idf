@@ -4,8 +4,8 @@ import json
 import os
 from torch.utils.tensorboard import SummaryWriter
 
-num_exp = len(os.listdir())
-writer = SummaryWriter(f'./checkpoint/exp{num_exp}/log')
+num_exp = len(os.listdir('./checkpoint/'))
+writer = SummaryWriter(f'./checkpoint/exp{num_exp-1}/log')
 def val(net, epoch, loader, device):
     print("Evaluating")
     with open(f'./checkpoint/exp{num_exp}/info.json','r') as f:
