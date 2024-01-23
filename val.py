@@ -67,11 +67,13 @@ def main():
     parser = argparse.ArgumentParser()
     args = parse_args(parser).parse_args()
 
-    batch_size = args.batch_size
-    device = args.device_type
-    num_workers = args.num_workers
-    weights = args.weights
-
+    batch_size    = args.batch_size
+    device        = args.device_type
+    num_workers   = args.num_workers
+    weights       = args.weights
+    
+    if device == "auto":
+        device = "cuda:0" if torch.cuda.is_available() else "cpu"
     if os.path.exists(weights):
         checkpoint = torch.load(weights)
         model = checkpoint["net"].to(device)

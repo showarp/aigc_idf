@@ -10,34 +10,21 @@ class LoadData(Dataset):
         super().__init__()
         self.transforms = transforms
         root = root
-        root_biggan = f"{root}/TinyGenImage/imagenet_ai_0419_biggan"
-        root_vqdm = f"{root}/TinyGenImage/imagenet_ai_0419_vqdm"
         root_sdv5 = f"{root}/TinyGenImage/imagenet_ai_0424_sdv5"
-        root_wukong = f"{root}/TinyGenImage/imagenet_ai_0424_wukong"
-        root_adm = f"{root}/TinyGenImage/imagenet_ai_0508_adm"
-        root_glide = f"{root}/TinyGenImage/imagenet_glide"
-        root_midjourney = f"{root}/TinyGenImage/imagenet_midjourney"
-        root_paths = [root_biggan,root_vqdm,root_sdv5,root_wukong,root_adm,root_glide,root_midjourney]
         if is_train==True:
-            root_paths = [f"{path}/train" for path in root_paths]
+            root_paths = f"{root_sdv5}/train"
         else:
-            root_paths = [f"{path}/val" for path in root_paths]
+            root_paths = f"{root_sdv5}/val"
 
-        ai_file = []
-        nature_file = []
+        ai_file = f"{root_paths}/ai"
+        nature_file = f"{root_paths}/nature"
         x_y = []
-        for path in root_paths:
-            ai_file.append(f"{path}/ai/")
-        for path in root_paths:
-            nature_file.append(f"{path}/nature/")
         
-        for ai in ai_file:
-            for ai_img in os.listdir(ai):
-                x_y.append((f"{ai}/{ai_img}",1))
+        for ai_img in os.listdir(ai_file):
+            x_y.append((f"{ai_file}/{ai_img}",1))
         
-        for nature in nature_file:
-            for nature_img in os.listdir(nature):
-                x_y.append((f"{nature}/{nature_img}",0))
+        for nature_img in os.listdir(nature_file):
+            x_y.append((f"{nature_file}/{nature_img}",0))
         
         self.x_y = x_y
     
@@ -51,7 +38,7 @@ class LoadData(Dataset):
             x = transform(x)
         return x,y
 
-def tiny_genimage_dataloader(root, batch_size=32, num_workers=4):
+def tiny_sdv5_dataloader(root, batch_size=32, num_workers=4):
     """加载dataloader
 
     Args:

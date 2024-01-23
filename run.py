@@ -36,9 +36,6 @@ def run(model, loader, seed, device, learning_rate, start_epochs=0, end_epochs=1
         f.write(info_json)
     writer = SummaryWriter(f"./checkpoint/exp{exp_num}/log")
 
-    if device == "auto":
-        device = "cuda:0" if torch.cuda.is_available() else "cpu"
-
     train_loader, val_loader = loader
 
     for epoch in range(start_epochs, end_epochs):
@@ -77,13 +74,15 @@ if not os.path.exists("./dataset"):
 parser = argparse.ArgumentParser()
 args = parse_args(parser).parse_args()
 
-batch_size = args.batch_size
-device = args.device_type
-lr = args.lr
-epochs = args.epochs
-num_workers = args.num_workers
-weights = args.weights
+batch_size      = args.batch_size
+device          = args.device_type
+lr              = args.lr
+epochs          = args.epochs
+num_workers     = args.num_workers
+weights         = args.weights
 
+if device == "auto":
+    device = "cuda:0" if torch.cuda.is_available() else "cpu"
 if os.path.exists(weights):
     checkpoint = torch.load(weights)
     model = checkpoint["net"].to(device)
