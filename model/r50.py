@@ -4,7 +4,7 @@ from torchvision.models import resnet50
 
 
 class ResNet50(nn.Module):
-    def __init__(self, num_class=1000) -> None:
+    def __init__(self, num_class=2) -> None:
         super().__init__()
         net = resnet50()
         num_in_features = net.fc.in_features
