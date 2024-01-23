@@ -35,7 +35,7 @@ def run(model, loader, epochs, seed, device, learning_rate):
         device = "cuda:0" if torch.cuda.is_available() else "cpu"
 
     train_loader, val_loader = loader
-    net = model
+    net = model.to(device)
 
     for epoch in range(epochs):
         train(
