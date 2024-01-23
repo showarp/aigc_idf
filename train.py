@@ -88,8 +88,11 @@ def main():
     train_loader, _ = data(
         root="./dataset", batch_size=batch_size, num_workers=num_workers
     )
-    num_exp = len(os.listdir("./checkpoint/")) - 1
-    writer = SummaryWriter(f"./checkpoint/exp{num_exp}/log")
+    if not os.path.exists("./checkpoint"):
+        os.makedirs("./checkpoint")
+    exp_num = len(os.listdir("./checkpoint"))
+    os.mkdir(f"./checkpoint/exp{exp_num}")
+    writer = SummaryWriter(f"./checkpoint/exp{exp_num}/log")
     for epoch in range(start_epoch, end_epochs):
         train(
             net=model,

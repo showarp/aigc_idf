@@ -96,6 +96,7 @@ if os.path.exists(weights):
     start_epoch = checkpoint["epoch"]
 else:
     model = models[args.model_type]().to(device)
+    start_epoch = 0
 data = datas[args.data_type]
 data = data(root="./dataset", batch_size=batch_size, num_workers=num_workers)
 
