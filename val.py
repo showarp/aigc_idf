@@ -38,8 +38,10 @@ def val(net, epoch, loader, device):
         with open(f'./checkpoint/exp{num_exp}/info.json','w') as f:
             f.write(json.dumps(checkpoint_info))
         save_content = {
-          "net":net,
-          "acc":checkpoint_info['best_acc'],
-          "epoch":checkpoint_info['epoch']
+            "net":net,
+            "acc":float(total_acc/len(loader)),
+            "epoch":epoch
         }
-        torch.save(save_content,'./checkpoint/exp{num_exp}/models/best.pth')
+        if not os.path.exists(f"./checkpoint/exp{num_exp}/models/"):
+            os.mkdir(f"./checkpoint/exp{num_exp}/models/")
+        torch.save(save_content,f'./checkpoint/exp{num_exp}/models/best.pth')
