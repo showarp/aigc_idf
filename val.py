@@ -39,7 +39,7 @@ def val(net, epoch, loader, device):
             f.write(json.dumps(checkpoint_info))
         save_content = {
           "net":net,
-          "acc":float(total_acc/len(loader)),
-          "epoch":epoch
+          "acc":checkpoint_info['best_acc'],
+          "epoch":checkpoint_info['epoch']
         }
-        torch.save('./checkpoint/exp{num_exp}/models/best.pth')
+        torch.save(save_content,'./checkpoint/exp{num_exp}/models/best.pth')
