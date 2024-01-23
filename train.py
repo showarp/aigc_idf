@@ -33,32 +33,20 @@ def train(net, epoch, loader, device, lr, board_writer=None):
             f"train     epoch:[{epoch}] Iter:{idx:03d}/{len(loader)} Loss:{total_loss/(idx+1):.4f} Acc:{total_acc/(idx+1):.4f} Lr:{optimizer.param_groups[0]['lr']}"
         )
         if board_writer:
-            board_writer.add_scalar(
-                "lr", optimizer.param_groups[0]["lr"], global_step=None, walltime=None
-            )
-            board_writer.add_scalar(
-                "train/Loss", total_loss / (idx + 1), global_step=None, walltime=None
-            )
-            board_writer.add_scalar(
-                "train/Acc", total_acc / (idx + 1), global_step=None, walltime=None
-            )
+            board_writer.add_scalar("lr", optimizer.param_groups[0]["lr"], global_step=None, walltime=None)
+            board_writer.add_scalar("train/Loss", total_loss / (idx + 1), global_step=None, walltime=None)
+            board_writer.add_scalar("train/Acc", total_acc / (idx + 1), global_step=None, walltime=None)
 
 
 def parse_args(parser):
     parser.add_argument("--model_type", type=str, help="used in model/model_entry.py")
     parser.add_argument("--weights", default="", type=str, help="model weight")
     parser.add_argument("--data_type", type=str, help="used in data/data_entry.py")
-    parser.add_argument(
-        "--device_type", type=str, default="auto", help="train device, default auto"
-    )
+    parser.add_argument("--device_type", type=str, default="auto", help="train device, default auto")
     parser.add_argument("--epochs", type=int, default=100, help="epoch")
     parser.add_argument("--lr", type=float, default=0.001, help="learning rate")
-    parser.add_argument(
-        "--batch_size", type=int, default=32, help="train data batch size"
-    )
-    parser.add_argument(
-        "--num_workers", type=int, default=4, help="dataloader num of workers"
-    )
+    parser.add_argument("--batch_size", type=int, default=32, help="train data batch size")
+    parser.add_argument("--num_workers", type=int, default=4, help="dataloader num of workers")
     return parser
 
 
@@ -69,12 +57,12 @@ def main():
     parser = argparse.ArgumentParser()
     args = parse_args(parser).parse_args()
 
-    batch_size = args.batch_size
-    device = args.device_type
-    lr = args.lr
-    end_epochs = args.epochs
-    num_workers = args.num_workers
-    weights = args.weights
+    batch_size      = args.batch_size
+    device          = args.device_type
+    lr              = args.lr
+    end_epochs      = args.epochs
+    num_workers     = args.num_workers
+    weights         = args.weights
 
     if os.path.exists(weights):
         checkpoint = torch.load(weights)
@@ -83,16 +71,15 @@ def main():
     else:
         model = models[args.model_type]().to(device)
         start_epoch = 0
-
     data = datas[args.data_type]
-    train_loader, _ = data(
-        root="./dataset", batch_size=batch_size, num_workers=num_workers
-    )
+    train_loader, _ = data(root="./dataset", batch_size=batch_size, num_workers=num_workers)
+    
     if not os.path.exists("./checkpoint"):
         os.makedirs("./checkpoint")
     exp_num = len(os.listdir("./checkpoint"))
     os.mkdir(f"./checkpoint/exp{exp_num}")
     writer = SummaryWriter(f"./checkpoint/exp{exp_num}/log")
+
     for epoch in range(start_epoch, end_epochs):
         train(
             net=model,

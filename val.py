@@ -30,16 +30,10 @@ def val(net, epoch, loader, device, is_triang=True, board_writer=None):
         total_acc += torch.argmax(predic, dim=1).eq(y).sum() / batch_size
         total_loss += loss
 
-        print(
-            f"val     epoch:[{epoch}] Iter:{idx:03d}/{len(loader)} Loss:{total_loss/(idx+1):.4f} Acc:{total_acc/(idx+1):.4f}"
-        )
+        print(f"val     epoch:[{epoch}] Iter:{idx:03d}/{len(loader)} Loss:{total_loss/(idx+1):.4f} Acc:{total_acc/(idx+1):.4f}")
         if is_triang and board_writer:
-            board_writer.add_scalar(
-                "val/Loss", total_loss / (idx + 1), global_step=None, walltime=None
-            )
-            board_writer.add_scalar(
-                "val/Acc", total_acc / (idx + 1), global_step=None, walltime=None
-            )
+            board_writer.add_scalar("val/Loss", total_loss / (idx + 1), global_step=None, walltime=None)
+            board_writer.add_scalar("val/Acc", total_acc / (idx + 1), global_step=None, walltime=None)
 
     if total_acc / len(loader) > best_acc and is_triang:
         print("Saveing Model...")
@@ -60,15 +54,9 @@ def val(net, epoch, loader, device, is_triang=True, board_writer=None):
 def parse_args(parser):
     parser.add_argument("--weights", default="", type=str, help="model weight")
     parser.add_argument("--data_type", type=str, help="used in data/data_entry.py")
-    parser.add_argument(
-        "--device_type", type=str, default="auto", help="train device, default auto"
-    )
-    parser.add_argument(
-        "--batch_size", type=int, default=32, help="train data batch size"
-    )
-    parser.add_argument(
-        "--num_workers", type=int, default=4, help="dataloader num of workers"
-    )
+    parser.add_argument("--device_type", type=str, default="auto", help="train device, default auto")
+    parser.add_argument("--batch_size", type=int, default=32, help="train data batch size")
+    parser.add_argument("--num_workers", type=int, default=4, help="dataloader num of workers")
     return parser
 
 
