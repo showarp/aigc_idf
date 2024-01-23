@@ -33,7 +33,13 @@ def val(net, epoch, loader, device):
 
     if total_acc/len(loader)>best_acc:
         print('Saveing Model...')
-        checkpoint_info['best_acc'] = total_acc/len(loader)
-        checkpoint_info['epoch'] = epoch
+        checkpoint_info['best_acc'] = float(total_acc/len(loader))
+        checkpoint_info['epoch'] = int(epoch)
         with open(f'./checkpoint/exp{num_exp}/info.json','w') as f:
             f.write(json.dumps(checkpoint_info))
+        save_content = {
+          "net":net,
+          "acc":float(total_acc/len(loader)),
+          "epoch":epoch
+        }
+        torch.save('./checkpoint/exp{num_exp}/models/best.pth')
