@@ -10,7 +10,7 @@ class LoadData(Dataset):
         super().__init__()
         self.transforms = transforms
         root = root
-        root_sdv5 = f"{root}/TinyGenImage/imagenet_midjourney"
+        root_sdv5 = f"{root}/TinyGenImage/imagenet_ai_0419_vqdm"
         if is_train==True:
             root_paths = f"{root_sdv5}/train"
         else:
@@ -38,7 +38,7 @@ class LoadData(Dataset):
             x = transform(x)
         return x,y
 
-def tiny_mj_dataloader(root, batch_size=32, num_workers=4):
+def tiny_vqdm_dataloader(root, batch_size=32, num_workers=4):
     """加载dataloader
 
     Args:
