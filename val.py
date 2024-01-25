@@ -31,9 +31,10 @@ def val(net, epoch, loader, device, is_triang=True, board_writer=None):
         total_loss += loss
 
         print(f"val     epoch:[{epoch}] Iter:{idx:03d}/{len(loader)} Loss:{total_loss/(idx+1):.4f} Acc:{total_acc/(idx+1):.4f}")
-        if is_triang and board_writer:
-            board_writer.add_scalar("val/Loss", total_loss / (idx + 1), global_step=None, walltime=None)
-            board_writer.add_scalar("val/Acc", total_acc / (idx + 1), global_step=None, walltime=None)
+    
+    if is_triang and board_writer:
+        board_writer.add_scalar("val/Loss", total_loss / len(loader), global_step=epoch, walltime=None)
+        board_writer.add_scalar("val/Acc", total_acc / len(loader), global_step=epoch, walltime=None)
 
     if total_acc / len(loader) > best_acc and is_triang:
         print("Saveing Model...")
