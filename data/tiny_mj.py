@@ -48,8 +48,8 @@ def tiny_mj_dataloader(root, batch_size=32, num_workers=4):
     Returns:
         tupe: train_loader,val_loader
     """
-    train_traisnforms = [public_transforms]
-    val_traisnforms = [public_transforms]
+    train_traisnforms = [public_transforms0,public_transforms]
+    val_traisnforms = [public_transforms0,public_transforms]
 
     train_data = LoadData(root=root, is_train=True, transforms=train_traisnforms)
     val_data = LoadData(root=root, is_train=False, transforms=val_traisnforms)
