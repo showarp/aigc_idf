@@ -33,9 +33,9 @@ def train(net, epoch, loader, device, lr, board_writer=None):
             f"train     epoch:[{epoch}] Iter:{idx:03d}/{len(loader)} Loss:{total_loss/(idx+1):.4f} Acc:{total_acc/(idx+1):.4f} Lr:{optimizer.param_groups[0]['lr']}"
         )
         if board_writer:
-            board_writer.add_scalar("lr", optimizer.param_groups[0]["lr"], global_step=None, walltime=None)
-            board_writer.add_scalar("train/Loss", total_loss / (idx + 1), global_step=None, walltime=None)
-            board_writer.add_scalar("train/Acc", total_acc / (idx + 1), global_step=None, walltime=None)
+            board_writer.add_scalar("lr", optimizer.param_groups[0]["lr"], global_step=(epoch*len(loader)+idx), walltime=None)
+            board_writer.add_scalar("train/Loss", total_loss / (idx + 1), global_step=(epoch*len(loader)+idx), walltime=None)
+            board_writer.add_scalar("train/Acc", total_acc / (idx + 1), global_step=(epoch*len(loader)+idx), walltime=None)
 
 
 def parse_args(parser):
