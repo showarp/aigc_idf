@@ -43,18 +43,28 @@ public_transforms0 = v2.Compose([
     v2.Resize((256,256)),
 ])
 
-def compose_blur_jpeg(q=.8):
+def compose_blur_jpeg(q=.8,p=.5):
+    """jpeg模糊
+
+    Args:
+        q (float, optional): 图像质量，默认0.8,质量最好为1. Defaults to .8.
+        p (float, optional): 变换概率. Defaults to .5.
+
+    Returns:
+        v2.Compose: 返回Compose
+    """
     # blur_w = 1*q
     jpeg_w = 1*q
-    blur_jpeg_transforms = v2.Compose([
-        # RandGaussianBlur(q=blur_w),
-        JpegZip(q=jpeg_w),
-    ])
+    if np.random.rand()<p:
+        blur_jpeg_transforms = v2.Compose([
+            # RandGaussianBlur(q=blur_w),
+            JpegZip(q=jpeg_w),
+        ])
+    else:
+        blur_jpeg_transforms = v2.Compose([])
     return blur_jpeg_transforms
 
 if __name__=="__main__":
     x = Image.open(r'dataset\TinyGenImage\imagenet_ai_0419_biggan\train\nature\n01498041_1932.JPEG').convert("RGB")
-    print(123)
-    x = public_transforms0(compose_blur_jpeg(.8)(x))
-    print(123)
+    x = compose_blur_jpeg(.1,p=1)(x)
     x.show(x)
