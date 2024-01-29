@@ -44,10 +44,10 @@ public_transforms0 = v2.Compose([
 ])
 
 def compose_blur_jpeg(q=.8):
-    blur_w = 1*q
+    # blur_w = 1*q
     jpeg_w = 1*q
     blur_jpeg_transforms = v2.Compose([
-        RandGaussianBlur(q=blur_w),
+        # RandGaussianBlur(q=blur_w),
         JpegZip(q=jpeg_w),
     ])
     return blur_jpeg_transforms
