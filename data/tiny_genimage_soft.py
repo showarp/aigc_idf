@@ -62,7 +62,7 @@ class LoadData(Dataset):
         soft_label[y] = p
         return x,soft_label
 
-def tiny_genimage_dataloader(root, batch_size=32, num_workers=4):
+def tiny_genimage_soft_dataloader(root, batch_size=32, num_workers=4):
     """加载dataloader
 
     Args:
