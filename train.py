@@ -33,7 +33,8 @@ def train(net, epoch, loader, device, lr, board_writer=None):
         total_loss += loss
 
         print(
-            f"train     epoch:[{epoch}] Iter:{idx:03d}/{len(loader)} Loss:{total_loss/(idx+1):.4f} Acc:{total_acc/(idx+1):.4f} Lr:{optimizer.param_groups[0]['lr']}"
+            f"train     epoch:[{epoch}] Iter:{idx:03d}/{len(loader)} Loss:{total_loss/(idx+1):.4f} Acc:{total_acc/(idx+1):.4f} Lr:{optimizer.param_groups[0]['lr']}",
+            end="\r"
         )
         if board_writer:
             board_writer.add_scalar("lr", optimizer.param_groups[0]["lr"], global_step=(epoch*len(loader)+idx), walltime=None)

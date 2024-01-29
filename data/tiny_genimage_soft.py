@@ -51,7 +51,7 @@ class LoadData(Dataset):
         n_classes = 2
         for transform in self.transforms:
             if transform == "blur":
-                img_quality = np.random.rand() #0.7~1.0
+                img_quality = np.random.rand()
                 t = compose_blur_jpeg(img_quality,p=.5)
                 x = t(x) 
                 continue
