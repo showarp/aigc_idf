@@ -1,7 +1,7 @@
 import os
 from typing import Any
 from torch.utils.data import Dataset, DataLoader
-from augment import *
+from .augment import *
 from PIL import Image
 
 
@@ -52,7 +52,6 @@ class LoadData(Dataset):
         for transform in self.transforms:
             if transform == "blur":
                 img_quality = 0.7+np.random.rand()*0.3 #0.7~1.0
-                print(img_quality)
                 t = compose_blur_jpeg(img_quality)
                 x = t(x) 
                 continue
@@ -81,13 +80,3 @@ def tiny_genimage_dataloader(root, batch_size=32, num_workers=4):
     train_loader = DataLoader(train_data,batch_size, num_workers=num_workers, shuffle=True)
     val_loader = DataLoader(val_data,batch_size, num_workers=num_workers, shuffle=True)
     return train_loader,val_loader
-
-if __name__=="__main__":
-    train_traisnforms = [public_transforms0,"blur"]
-    train_data = LoadData(root='./dataset', is_train=True, transforms=train_traisnforms)
-    x,y = train_data[1000]
-    print(y)
-    # import matplotlib.pyplot as plt
-    # plt.imshow(x.permute((1,2,0)))
-    # plt.show()
-    x.show()
