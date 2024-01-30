@@ -38,7 +38,7 @@ class LoadData(Dataset):
         n_classes = 2
         for transform in self.transforms:
             if transform == "blur":
-                img_quality = np.random.randint(75,100)*0.01
+                img_quality = np.random.randint(100,101)*0.01
                 t = compose_blur_jpeg(img_quality,p=.3)
                 x = t(x)
                 continue
@@ -47,6 +47,7 @@ class LoadData(Dataset):
         soft_label = torch.zeros(2)
         soft_label[::] = 1-p/(n_classes-1)
         soft_label[y] = p
+        print(soft_label)
         return x,soft_label
 
 def tiny_sdv5_soft_dataloader(root, batch_size=32, num_workers=4):
