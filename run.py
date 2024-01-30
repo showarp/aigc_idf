@@ -15,7 +15,7 @@ from val import val
 def random_seed(seed):
     random.seed(seed)
     os.environ["PYTHONHASHSEED"] = str(seed)
-    np.random.seed(seed)
+    # np.random.seed(seed)
     torch.manual_seed(seed)
     torch.cuda.manual_seed(seed)
     torch.cuda.manual_seed_all(seed)  # if you are using multi-GPU.
@@ -25,7 +25,7 @@ def random_seed(seed):
 
 
 def run(model, loader, seed, device, learning_rate, start_epochs=0, end_epochs=100):
-    # random_seed(seed)
+    random_seed(seed)
     if not os.path.exists("./checkpoint"):
         os.makedirs("./checkpoint")
     exp_num = len(os.listdir("./checkpoint"))
