@@ -29,9 +29,3 @@ class CKLoss:
         kl_loss = F.kl_div(predic_softmax,target,reduction="batchmean")
         ce_loss = F.cross_entropy(predic,target)
         return kl_loss+ce_loss
-
-# x = torch.tensor([[1., 2., 3.]],dtype=torch.float32)
-# y = F.softmax(x,dim=1) 
-# x = F.softmax(x,dim=1).log()
-# # print(F.softmax(x).log(),F.log_softmax(x))
-# print(F.kl_div(x,y,reduction="batchmean"))
