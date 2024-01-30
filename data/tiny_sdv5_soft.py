@@ -10,34 +10,21 @@ class LoadData(Dataset):
         super().__init__()
         self.transforms = transforms
         root = root
-        root_biggan = f"{root}/TinyGenImage/imagenet_ai_0419_biggan"
-        root_vqdm = f"{root}/TinyGenImage/imagenet_ai_0419_vqdm"
         root_sdv5 = f"{root}/TinyGenImage/imagenet_ai_0424_sdv5"
-        root_wukong = f"{root}/TinyGenImage/imagenet_ai_0424_wukong"
-        root_adm = f"{root}/TinyGenImage/imagenet_ai_0508_adm"
-        root_glide = f"{root}/TinyGenImage/imagenet_glide"
-        root_midjourney = f"{root}/TinyGenImage/imagenet_midjourney"
-        root_paths = [root_biggan,root_vqdm,root_sdv5,root_wukong,root_adm,root_glide,root_midjourney]
         if is_train==True:
-            root_paths = [f"{path}/train" for path in root_paths]
+            root_paths = f"{root_sdv5}/train"
         else:
-            root_paths = [f"{path}/val" for path in root_paths]
+            root_paths = f"{root_sdv5}/val"
 
-        ai_file = []
-        nature_file = []
+        ai_file = f"{root_paths}/ai"
+        nature_file = f"{root_paths}/nature"
         x_y = []
-        for path in root_paths:
-            ai_file.append(f"{path}/ai/")
-        for path in root_paths:
-            nature_file.append(f"{path}/nature/")
         
-        for ai in ai_file:
-            for ai_img in os.listdir(ai):
-                x_y.append((f"{ai}/{ai_img}",1))
+        for ai_img in os.listdir(ai_file):
+            x_y.append((f"{ai_file}/{ai_img}",1))
         
-        for nature in nature_file:
-            for nature_img in os.listdir(nature):
-                x_y.append((f"{nature}/{nature_img}",0))
+        for nature_img in os.listdir(nature_file):
+            x_y.append((f"{nature_file}/{nature_img}",0))
         
         self.x_y = x_y
     
@@ -51,9 +38,9 @@ class LoadData(Dataset):
         n_classes = 2
         for transform in self.transforms:
             if transform == "blur":
-                img_quality = np.random.rand()
-                t = compose_blur_jpeg(img_quality,p=.5)
-                x = t(x) 
+                img_quality = 1
+                t = compose_blur_jpeg(img_quality,p=0)
+                x = t(x)
                 continue
             x = transform(x)
         p = torch.tensor(1-(1-1/2)*(1-img_quality)**2)
@@ -62,7 +49,7 @@ class LoadData(Dataset):
         soft_label[y] = p
         return x,soft_label
 
-def tiny_genimage_dataloader(root, batch_size=32, num_workers=4):
+def tiny_sdv5_dataloader(root, batch_size=32, num_workers=4):
     """加载dataloader
 
     Args:
@@ -72,7 +59,7 @@ def tiny_genimage_dataloader(root, batch_size=32, num_workers=4):
     Returns:
         tupe: train_loader,val_loader
     """
-    train_traisnforms = [public_transforms0,public_transforms]
+    train_traisnforms = [public_transforms0,"blur",public_transforms]
     val_traisnforms = [public_transforms0,public_transforms]
 
     train_data = LoadData(root=root, is_train=True, transforms=train_traisnforms)

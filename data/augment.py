@@ -61,7 +61,7 @@ def compose_blur_jpeg(q=.8,p=.5):
             JpegZip(q=jpeg_w),
         ])
     else:
-        blur_jpeg_transforms = v2.Compose([])
+        blur_jpeg_transforms = lambda x:x
     return blur_jpeg_transforms
 
 if __name__=="__main__":
