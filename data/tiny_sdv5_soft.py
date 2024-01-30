@@ -47,7 +47,6 @@ class LoadData(Dataset):
         soft_label = torch.zeros(2)
         soft_label[::] = 1-p/(n_classes-1)
         soft_label[y] = p
-        print(soft_label)
         return x,soft_label
 
 def tiny_sdv5_soft_dataloader(root, batch_size=32, num_workers=4):
