@@ -14,8 +14,8 @@ def train(net, epoch, loader, device, lr, board_writer=None):
     print("Traing")
     net.train()
     optimizer = optim.Adam(params=net.parameters(), lr=lr)
-    # loss_func = CrossEntropyLoss()
-    loss_func = SoftAugmentLoss()
+    loss_func = CrossEntropyLoss()
+    # loss_func = SoftAugmentLoss()
     total_acc = 0
     total_loss = 0
     for idx, (x, y) in enumerate(loader):
@@ -27,8 +27,8 @@ def train(net, epoch, loader, device, lr, board_writer=None):
         optimizer.step()
 
         batch_size = y.size(0)
-        # total_acc += torch.argmax(predic, dim=1).eq(y).sum() / batch_size
-        total_acc += torch.argmax(predic, dim=1).eq(torch.argmax(y, dim=1)).sum() / batch_size
+        total_acc += torch.argmax(predic, dim=1).eq(y).sum() / batch_size
+        # total_acc += torch.argmax(predic, dim=1).eq(torch.argmax(y, dim=1)).sum() / batch_size
 
         total_loss += loss
 

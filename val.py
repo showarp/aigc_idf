@@ -17,8 +17,8 @@ def val(net, epoch, loader, device, is_triang=True, board_writer=None):
 
     print("Evaluating")
     net.eval()
-    # loss_func = CrossEntropyLoss()
-    loss_func = SoftAugmentLoss()
+    loss_func = CrossEntropyLoss()
+    # loss_func = SoftAugmentLoss()
     total_acc = 0
     total_loss = 0
     for idx, (x, y) in enumerate(loader):
@@ -28,7 +28,8 @@ def val(net, epoch, loader, device, is_triang=True, board_writer=None):
             loss = loss_func(predic, y)
 
         batch_size = y.size(0)
-        total_acc += torch.argmax(predic, dim=1).eq(torch.argmax(y, dim=1)).sum() / batch_size
+        total_acc += torch.argmax(predic, dim=1).eq(y).sum() / batch_size
+        # total_acc += torch.argmax(predic, dim=1).eq(torch.argmax(y, dim=1)).sum() / batch_size
         total_loss += loss
 
         print(f"val     epoch:[{epoch}] Iter:{idx:03d}/{len(loader)} Loss:{total_loss/(idx+1):.4f} Acc:{total_acc/(idx+1):.4f}")
