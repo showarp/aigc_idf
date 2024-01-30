@@ -7,6 +7,7 @@ from .tiny_glide import tiny_glide_dataloader
 from .tiny_mj import tiny_mj_dataloader
 from .tiny_vqdm import tiny_vqdm_dataloader
 from .tiny_genimage_soft import tiny_genimage_soft_dataloader
+from .tiny_sdv5_soft import tiny_sdv5_soft_dataloader
 
 datas = {
     "tiny_genimage":tiny_genimage_dataloader,
@@ -17,5 +18,6 @@ datas = {
     "tiny_glide":tiny_glide_dataloader,
     "tiny_mj":tiny_mj_dataloader,
     "tiny_vqdm":tiny_vqdm_dataloader,
-    "tiny_genimage_soft":tiny_genimage_soft_dataloader
+    "tiny_genimage_soft":tiny_genimage_soft_dataloader,
+    "tiny_sdv5_soft":tiny_sdv5_soft_dataloader
 }

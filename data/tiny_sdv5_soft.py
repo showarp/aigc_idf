@@ -49,7 +49,7 @@ class LoadData(Dataset):
         soft_label[y] = p
         return x,soft_label
 
-def tiny_sdv5_dataloader(root, batch_size=32, num_workers=4):
+def tiny_sdv5_soft_dataloader(root, batch_size=32, num_workers=4):
     """加载dataloader
 
     Args:
