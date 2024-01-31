@@ -18,8 +18,8 @@ def val(net, epoch, loader, device, is_triang=True, board_writer=None):
     print("Evaluating")
     net.eval()
     # loss_func = CrossEntropyLoss()
-    # loss_func = SoftAugmentLoss()
-    loss_func = CKLoss()
+    loss_func = SoftAugmentLoss()
+    # loss_func = CKLoss()
     total_acc = 0
     total_loss = 0
     for idx, (x, y) in enumerate(loader):
