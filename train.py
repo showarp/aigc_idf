@@ -1,6 +1,6 @@
 import argparse
 from torch import optim
-from loss import CrossEntropyLoss,SoftAugmentLoss
+from loss import CrossEntropyLoss,SoftAugmentLoss,CKLoss
 import torch
 import os
 from torch.utils.tensorboard import SummaryWriter
@@ -15,7 +15,8 @@ def train(net, epoch, loader, device, lr, board_writer=None):
     net.train()
     optimizer = optim.Adam(params=net.parameters(), lr=lr)
     # loss_func = CrossEntropyLoss()
-    loss_func = SoftAugmentLoss()
+    # loss_func = SoftAugmentLoss()
+    loss_func = CKLoss()
     total_acc = 0
     total_loss = 0
     for idx, (x, y) in enumerate(loader):
