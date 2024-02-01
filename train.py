@@ -13,7 +13,7 @@ import os
 def train(net, epoch, loader, device, lr, board_writer=None):
     print("Traing")
     net.train()
-    optimizer = optim.Adam(params=net.parameters(), lr=lr)
+    optimizer = optim.Adam(params=net.parameters(), lr=lr,weight_decay=0.01)
     # loss_func = CrossEntropyLoss()
     loss_func = SoftAugmentLoss()
     # loss_func = CKLoss()
