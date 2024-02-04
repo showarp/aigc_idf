@@ -39,7 +39,7 @@ def val(net, epoch, loader, device, is_triang=True, board_writer=None):
         board_writer.add_scalar("val/Loss", total_loss / len(loader), global_step=epoch, walltime=None)
         board_writer.add_scalar("val/Acc", total_acc / len(loader), global_step=epoch, walltime=None)
 
-    if total_acc / len(loader) > best_acc and is_triang:
+    if is_triang and total_acc / len(loader) > best_acc:
         print("Saveing Model...")
         checkpoint_info["best_acc"] = float(total_acc / len(loader))
         checkpoint_info["epoch"] = int(epoch)
