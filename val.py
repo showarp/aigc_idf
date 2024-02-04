@@ -79,7 +79,7 @@ def main():
     if device == "auto":
         device = "cuda:0" if torch.cuda.is_available() else "cpu"
     if os.path.exists(weights):
-        checkpoint = torch.load(weights)
+        checkpoint = torch.load(weights,map_location=device)
         model = checkpoint["net"].to(device)
     data = datas[args.data_type]
     _, val_loader = data(root="./dataset", batch_size=batch_size, num_workers=num_workers)

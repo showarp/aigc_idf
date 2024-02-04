@@ -84,7 +84,7 @@ weights         = args.weights
 if device == "auto":
     device = "cuda:0" if torch.cuda.is_available() else "cpu"
 if os.path.exists(weights):
-    checkpoint = torch.load(weights)
+    checkpoint = torch.load(weights,map_location=device)
     model = checkpoint["net"].to(device)
     start_epoch = checkpoint["epoch"]
 else:
