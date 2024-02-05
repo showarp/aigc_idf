@@ -1,5 +1,6 @@
 import argparse
 from torch import optim
+from torch.optim.lr_scheduler import ExponentialLR
 from loss import CrossEntropyLoss,SoftAugmentLoss,CKLoss
 import torch
 import os
@@ -8,12 +9,18 @@ import argparse
 from data.data_entry import datas
 from model.model_entry import models
 import os
+from utlise import log_print,create_checkpoint
 
 
-def train(net, epoch, loader, device, lr, board_writer=None):
-    print("Traing")
+def train(net, epoch, loader, device, optimizer,only_train=False,board_writer=None):
+    if not only_train:
+        num_exp = len(os.listdir("./checkpoint/")) - 1
+        lprint = log_print(f"./checkpoint/exp{num_exp}/runing_log.txt")
+    else:
+        lprint = log_print(save_log=False)
+    lprint("Traing")
     net.train()
-    optimizer = optim.Adam(params=net.parameters(), lr=lr,weight_decay=0.01)
+    
     # loss_func = CrossEntropyLoss()
     loss_func = SoftAugmentLoss()
     # loss_func = CKLoss()
@@ -33,7 +40,7 @@ def train(net, epoch, loader, device, lr, board_writer=None):
 
         total_loss += loss
 
-        print(
+        lprint(
             f"train     epoch:[{epoch}] Iter:{idx:03d}/{len(loader)} Loss:{total_loss/(idx+1):.4f} Acc:{total_acc/(idx+1):.4f} Lr:{optimizer.param_groups[0]['lr']}",
             end="\r"
         )
@@ -81,19 +88,19 @@ def main():
     data = datas[args.data_type]
     train_loader, _ = data(root="./dataset", batch_size=batch_size, num_workers=num_workers)
     
-    if not os.path.exists("./checkpoint"):
-        os.makedirs("./checkpoint")
-    exp_num = len(os.listdir("./checkpoint"))
-    os.mkdir(f"./checkpoint/exp{exp_num}")
-    writer = SummaryWriter(f"./checkpoint/exp{exp_num}/log")
+    log_file = create_checkpoint()
+    writer = SummaryWriter(f"{log_file}/log")
 
+    optimizer = optim.Adam(params=model.parameters(), lr=lr)
+    scheduler = ExponentialLR(optimizer, gamma=0.9)
+    
     for epoch in range(start_epoch, end_epochs):
         train(
             net=model,
             epoch=epoch,
             loader=train_loader,
             device=device,
-            lr=lr,
+            optimizer=optimizer,
             board_writer=writer,
         )
 

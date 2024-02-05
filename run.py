@@ -8,8 +8,11 @@ from data.data_entry import datas
 from model.model_entry import models
 import os
 from torch.utils.tensorboard import SummaryWriter
+from torch.optim.lr_scheduler import ExponentialLR
+from torch import optim
 from train import train
 from val import val
+from utlise import create_checkpoint
 
 
 def random_seed(seed):
@@ -24,27 +27,26 @@ def random_seed(seed):
     torch.backends.cudnn.enabled = False
 
 
-def run(model, loader, seed, device, learning_rate, start_epochs=0, end_epochs=100):
+def run(log_info,model, loader, seed, device, start_epochs=0, end_epochs=100):
     random_seed(seed)
-    if not os.path.exists("./checkpoint"):
-        os.makedirs("./checkpoint")
-    exp_num = len(os.listdir("./checkpoint"))
-    os.mkdir(f"./checkpoint/exp{exp_num}")
+    log_file = create_checkpoint()
     info_json = {"best_acc": 0, "epoch": 0}
+    info_json = {**info_json,**log_info}
     info_json = json.dumps(info_json)
-    with open(f"./checkpoint/exp{exp_num}/info.json", "w") as f:
+    with open(f"{log_file}/info.json", "w") as f:
         f.write(info_json)
-    writer = SummaryWriter(f"./checkpoint/exp{exp_num}/log")
+    writer = SummaryWriter(f"{log_file}/log")
 
     train_loader, val_loader = loader
-
+    optimizer = optim.Adam(params=model.parameters(), lr=lr)
+    scheduler = ExponentialLR(optimizer, gamma=0.9)
     for epoch in range(start_epochs, end_epochs):
         train(
             net=model,
             epoch=epoch,
             loader=train_loader,
             device=device,
-            lr=learning_rate,
+            optimizer=optimizer,
             board_writer=writer,
         )
         val(
@@ -54,6 +56,7 @@ def run(model, loader, seed, device, learning_rate, start_epochs=0, end_epochs=1
             device=device,
             board_writer=writer,
         )
+        scheduler.step()
 
 
 def parse_args(parser):
@@ -95,11 +98,11 @@ data = data(root="./dataset", batch_size=batch_size, num_workers=num_workers)
 
 if __name__ == "__main__":
     run(
+        log_info = {"data_type":args.data_type,"model_type":args.model_type},
         model=model,
         loader=data,
         start_epochs=start_epoch,
         end_epochs=epochs,
         seed=42,
         device=device,
-        learning_rate=lr,
     )
